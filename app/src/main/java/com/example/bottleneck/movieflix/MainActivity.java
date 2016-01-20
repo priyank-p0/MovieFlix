@@ -1,6 +1,8 @@
 package com.example.bottleneck.movieflix;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +17,7 @@ import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.content.Intent;
+import android.widget.Toast;
 
 import com.example.bottleneck.movieflix.models.MovieModel;
 import com.squareup.picasso.Picasso;
@@ -39,7 +42,12 @@ public class MainActivity extends AppCompatActivity {
     Integer postitonMain=null;
     private static boolean flag=true;
 
-
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnected();
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -47,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
 
         Settings obj=new Settings();
 
@@ -56,9 +65,17 @@ public class MainActivity extends AppCompatActivity {
         vale="top_rated";
         flag=false;
     }
+        boolean net=isOnline();
+        if(net)
+        {
+        new Task().execute("http://api.themoviedb.org/3/discover/movie?sort_by="+ vale+".desc&api_key="+"API_KEY");}
 
-        new Task().execute("http://api.themoviedb.org/3/discover/movie?sort_by="+ vale+".desc&api_key="+"API_KEY");
+            else
+        {
+            String message="Check Your Network Connection";
+            Toast.makeText(this,message, Toast.LENGTH_LONG).show();
 
+        }
 
         }
 
