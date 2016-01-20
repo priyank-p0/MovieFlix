@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#B22222</color>
+    <color name="colorPrimaryDark">#B22222</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="grey">#333333</color>
+    <color name="white">#ffffff </color>
+    <color name="firebrick">#cc0000</color>
+</resources>

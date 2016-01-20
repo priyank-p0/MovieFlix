@@ -1,0 +1,8 @@
+The API key is=0cb67e7b6e1f25bd955be7fab866e8b9
+
+the key needs to be inserted in the following locations:
+
+
+1.Paste the apikey in the MainActivity.class,in onCreate function where "API_KEY"is written.
+
+2.paste the apikey in the movieDetail.class,in onCreate function where "API_KEY"is written.
