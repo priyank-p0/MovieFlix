@@ -12,6 +12,7 @@ public class MovieModel {
 
     private int id;
 
+
     public String getPoster_path() {
         return poster_path;
     }
@@ -29,4 +30,6 @@ public class MovieModel {
     public void setId(int id) {
         this.id = id;
     }
+
+
 }

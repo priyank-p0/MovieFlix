@@ -1,6 +1,7 @@
 package com.example.bottleneck.movieflix;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -41,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
     public List <MovieModel>movieModelList;
     Integer postitonMain=null;
     private static boolean flag=true;
-
+    DatabaseHelper myDb;
     public boolean isOnline() {
         ConnectivityManager cm =
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -56,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        myDb = new DatabaseHelper(this);
 
         Settings obj=new Settings();
 
@@ -171,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
         //used to go to the next activity on clicking on the movie icon
 
        @Override
-        public View getView( final int position, View convertView, ViewGroup parent) throws NullPointerException
+        public View getView(  int position, View convertView, ViewGroup parent) throws NullPointerException
         {
 
             if(convertView==null)

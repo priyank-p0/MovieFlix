@@ -47,7 +47,11 @@ public class Settings extends AppCompatActivity {
 
         startActivity(i);
     }
-
+    public void dispFav(View v)
+    {
+        Intent i=new Intent(Settings.this, Favourates.class);
+        startActivity(i);
+    }
 
 
 
