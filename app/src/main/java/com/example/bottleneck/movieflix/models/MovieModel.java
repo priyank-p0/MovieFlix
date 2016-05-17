@@ -11,7 +11,11 @@ public class MovieModel {
     private String poster_path;
 
     private int id;
+    private int favPosition=0;
 
+
+    public MovieModel() {
+    }
 
     public String getPoster_path() {
         return poster_path;
@@ -32,4 +36,11 @@ public class MovieModel {
     }
 
 
+    public int getFavPosition() {
+        return favPosition;
+    }
+
+    public void setFavPosition(int favPosition) {
+        this.favPosition = favPosition;
+    }
 }

@@ -80,5 +80,16 @@
             android:layout_below="@+id/ratingBar"
             android:layout_alignParentBottom="true" />
 
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Unfavourate"
+            android:id="@+id/checkBox"
+            android:layout_alignBottom="@+id/icon"
+            android:layout_alignRight="@+id/overview"
+            android:layout_alignEnd="@+id/overview"
+            android:checked="true"
+            android:onClick="onCheckboxClicked"/>
+
     </RelativeLayout>
 </ScrollView>

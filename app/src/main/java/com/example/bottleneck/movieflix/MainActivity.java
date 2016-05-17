@@ -1,7 +1,6 @@
 package com.example.bottleneck.movieflix;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -35,12 +34,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    public int reference;
-    private TextView display;
-    ImageButton movieButton;
+    static ImageButton movieButton;
     static int value;
-    public List <MovieModel>movieModelList;
-    Integer postitonMain=null;
+    static int pos;
+  static  public List <MovieModel>movieModelList;
+    static int postitonMain;
     private static boolean flag=true;
     DatabaseHelper myDb;
     public boolean isOnline() {
@@ -184,6 +182,7 @@ public class MainActivity extends AppCompatActivity {
 
             movieButton=(ImageButton)convertView.findViewById(R.id.movieButton);
             movieButton.setTag(Integer.valueOf(position));
+            pos=position;
             int width = getApplicationContext().getResources().getDisplayMetrics().widthPixels;
             int height = getApplicationContext().getResources().getDisplayMetrics().heightPixels;
             movieButton.setPadding(0, 0, 0, 0);
@@ -200,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    public void showMovieDetail(View view)
+    public void showMovieDetail(View view)//starts a new activity
     {
         postitonMain = (Integer)view.getTag();//gets the positon of the button, required to get the details of the movie
         value=movieModelList.get(postitonMain).getId();//gets the ID of the movie

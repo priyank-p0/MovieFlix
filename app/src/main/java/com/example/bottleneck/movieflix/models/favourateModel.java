@@ -12,6 +12,7 @@ public class FavourateModel {
     private String rating;
 
 
+
     public String getId() {
         return id;
     }
@@ -59,4 +60,6 @@ public class FavourateModel {
     public void setRating(String rating) {
         this.rating = rating;
     }
+
+
 }

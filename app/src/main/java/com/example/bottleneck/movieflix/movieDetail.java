@@ -1,17 +1,16 @@
 package com.example.bottleneck.movieflix;
 
-import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.provider.BaseColumns;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.method.LinkMovementMethod;
 import android.util.Base64;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
@@ -39,57 +38,67 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.zip.Inflater;
+
 
 public class movieDetail extends AppCompatActivity {
 ListView Trailerview;
-    DatabaseHelper myDb;
-    MainActivity obj=new MainActivity();
+    CheckBox favBox ;
+   static ArrayList<String>arrayList=new ArrayList<>();
+     String array[];
+     Cursor cursor;
+     MainActivity obj=new MainActivity();
     String Title="";
     String date="";
     String overview="";
+    DatabaseHelper myDb;
     ArrayList videol=new ArrayList<String>();
-
     double popu=0.0;
     String poster="";
    static String byteArray;
     static String rString;
-    String Id;
-    String Key;
-    String arrayKey[]=new String[100];
-   // String arrayId[];
     String arrReview[]=new String[100];
-    Bitmap bitmap;
+    int position;
+     List<MovieModel>movieModelList;
+    String va;
     @Override
     protected void onCreate(Bundle savedInstanceState) throws NullPointerException{
-
         super.onCreate(savedInstanceState);
+         favBox = (CheckBox) findViewById(R.id.favouratecheckBox);
+
         setContentView(R.layout.activity_movie_detail);
-        String pos;
+         position=obj.pos;
+        movieModelList=obj.movieModelList;
+
         myDb = new DatabaseHelper(this);
 
-
+        cursor=myDb.getData();
 
         int val=  obj.value;
-        String v= Integer.toString(val);
+        va = Integer.toString(val);
+         array=new String[cursor.getCount()];
+        new JSONTask().execute("http://api.themoviedb.org/3/movie/" + va + "?api_key="+"API_KEY","http://api.themoviedb.org/3/movie/"+va+"/videos?api_key=API_KEY","http://api.themoviedb.org/3/movie/"+va+"/reviews?api_key=API_KEY");
 
-        new JSONTask().execute("http://api.themoviedb.org/3/movie/" + v + "?api_key="+"API_KEY","http://api.themoviedb.org/3/movie/"+v+"/videos?api_key=API_KEY","http://api.themoviedb.org/3/movie/"+v+"/reviews?api_key=API_KEY");
 
 
     }
-//FavourateModel favourateModel;
-    public void onCheckboxClicked(View v)
-    {
-        CheckBox favBox=(CheckBox)findViewById(R.id.favouratecheckBox);
 
-        if(favBox.isChecked())
-        {
 
-            boolean isInserted=myDb.insertData(Title,date,overview,byteArray,rString);
-            if(isInserted)
-                Toast.makeText(movieDetail.this,"Added to favourate",Toast.LENGTH_LONG).show();
+
+        public void onCheckboxClicked (View v){
+
+
+
+
+            boolean isInserted = myDb.insertData(Title, date, overview, byteArray, rString);
+            if (isInserted) {
+                Toast.makeText(movieDetail.this, "Added to favourate", Toast.LENGTH_LONG).show();
+
         }
+
     }
+
+
+
 
 
 
@@ -220,28 +229,44 @@ ListView Trailerview;
             String URL="http://image.tmdb.org/t/p/w185/"+poster;
             Picasso.with(getApplicationContext()).load(URL).resize(450, 700).into(pic);
             StringBuilder builder = new StringBuilder();
-            for (int i=0;i<arrReview.length;i++){
-                String s=arrReview[i];
+            for (int i=0;i<arrReview.length;i++) {
+                String s = arrReview[i];
 
-                if(s!=null){
-                    builder.append(s+"\n ");
-                Overview.append(builder.toString());}
+                if (s != null) {
+                    builder.append(s + "\n ");
+                    Overview.append(builder.toString());
+                }
+                int in=0;
 
+                if (cursor.moveToFirst()) {
+                    do {
+                        CheckBox fav=(CheckBox)findViewById(R.id.favouratecheckBox);
 
-                    v();
+                        if(cursor.getString(1).equalsIgnoreCase(Title))
+                        {
+                            fav.setChecked(true);
+                            fav.setClickable(false);
+                            break;
+                        }
+                       // arrayList.add(cursor.getString(1));
+                       // String t=Title;
+                       // if(arrayList.get(in).toString().equalsIgnoreCase(Title))
+                         // in++;
+
+                    } while (cursor.moveToNext()&&in<cursor.getCount());
+                }
+                v();
+
             }
-
-
-
-
-
-
         }
 
 
         protected void onPostExecute(Void m) {
 
             super.onPostExecute(m);
+
+
+
             exec();
 
 
@@ -259,6 +284,8 @@ ListView Trailerview;
 
 
     }
+
+
 private AdapterView.OnItemClickListener ListClickHandler=new AdapterView.OnItemClickListener(){
 
     @Override
