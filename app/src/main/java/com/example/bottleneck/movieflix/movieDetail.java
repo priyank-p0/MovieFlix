@@ -76,7 +76,7 @@ ListView Trailerview;
         int val=  obj.value;
         va = Integer.toString(val);
          array=new String[cursor.getCount()];
-        new JSONTask().execute("http://api.themoviedb.org/3/movie/" + va + "?api_key="+"API_KEY","http://api.themoviedb.org/3/movie/"+va+"/videos?api_key=API_KEY","http://api.themoviedb.org/3/movie/"+va+"/reviews?api_key=API_KEY");
+        new JSONTask().execute("http://api.themoviedb.org/3/movie/" + va + "?api_key="+"API_KEY","http://api.themoviedb.org/3/movie/"+va+"/videos?api_key="+"API_KEY","http://api.themoviedb.org/3/movie/"+va+"/reviews?api_key="+"API_KEY");
 
 
 

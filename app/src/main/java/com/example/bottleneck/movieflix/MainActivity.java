@@ -5,6 +5,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -34,10 +35,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    private static final String STATE_MOVIES ="state_movies" ;
     static ImageButton movieButton;
     static int value;
     static int pos;
-  static  public List <MovieModel>movieModelList;
+  static  public ArrayList <MovieModel>movieModelList;
     static int postitonMain;
     private static boolean flag=true;
     DatabaseHelper myDb;
@@ -60,35 +62,44 @@ public class MainActivity extends AppCompatActivity {
         Settings obj=new Settings();
 
         String vale=obj.valu;
-    if(flag)
-    {
-        vale="top_rated";
-        flag=false;
-    }
-        boolean net=isOnline();
-        if(net)
+        if(savedInstanceState!=null)
         {
-        new Task().execute("http://api.themoviedb.org/3/discover/movie?sort_by="+ vale+".desc&api_key="+"API_KEY");}
+          movieModelList=savedInstanceState.getParcelableArrayList(STATE_MOVIES);
+        }
+        else {
+            if (flag) {
+                vale = "top_rated";
+                flag = false;
+            }
+            boolean net = isOnline();
+            if (net) {
+                new Task().execute("http://api.themoviedb.org/3/discover/movie?sort_by=" + vale + ".desc&api_key=" + "API_KEY");
+            } else {
+                String message = "Check Your Network Connection";
+                Toast.makeText(this, message, Toast.LENGTH_LONG).show();
 
-            else
-        {
-            String message="Check Your Network Connection";
-            Toast.makeText(this,message, Toast.LENGTH_LONG).show();
-
+            }
+        }
         }
 
-        }
+@Override
+public void onSaveInstanceState(Bundle outstate)
+{
+    super.onSaveInstanceState(outstate);
+    outstate.putParcelableArrayList(STATE_MOVIES, (ArrayList<? extends Parcelable>) movieModelList);
+}
 
 
 
-    public class Task extends AsyncTask<String,String,List<MovieModel>>
+
+    public class Task extends AsyncTask<String,String,ArrayList<MovieModel>>
     {
 
         GridView movieView=(GridView)findViewById(R.id.movieView);
 
 
         @Override
-        protected List<MovieModel> doInBackground(String... params) {
+        protected ArrayList<MovieModel> doInBackground(String... params) {
             HttpURLConnection connection=null;
 
             try{
@@ -114,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
 
                 JSONObject JSON=new JSONObject(finalJson);
                 JSONArray parentarray=JSON.getJSONArray("results");
-                List<MovieModel> movieList=new ArrayList<>();
+                ArrayList<MovieModel> movieList=new ArrayList<>();
                 for(int i=0;i<parentarray.length();i++)
                 {
                     JSONObject finalObject=parentarray.getJSONObject(i);
@@ -126,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
 
                 }
 
-                return movieList;
+                return  movieList;
             }
             catch (IOException e)
             {
@@ -143,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(List<MovieModel> outcome) {
+        protected void onPostExecute(ArrayList<MovieModel> outcome) {
             super.onPostExecute(outcome);
             MovieAdapter movieAdapter=new MovieAdapter(getApplicationContext(),R.layout.main_layout,outcome);
             movieView.setAdapter(movieAdapter);
@@ -157,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
         private Context context;
         private LayoutInflater inflater;
 
-        public MovieAdapter(Context context, int resource, List <MovieModel>objects) {
+        public MovieAdapter(Context context, int resource, ArrayList <MovieModel>objects) {
 
             super(context, resource, objects);
             co=context;

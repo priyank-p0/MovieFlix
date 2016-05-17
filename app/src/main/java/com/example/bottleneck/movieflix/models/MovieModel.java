@@ -1,9 +1,12 @@
 package com.example.bottleneck.movieflix.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by priyankpatel on 1/12/16.
  */
-public class MovieModel {
+public class MovieModel implements Parcelable{
 
 
 
@@ -15,6 +18,13 @@ public class MovieModel {
 
 
     public MovieModel() {
+    }
+
+    public MovieModel(Parcel input)
+    {
+        poster_path=input.readString();
+        id=input.readInt();
+        favPosition=input.readInt();
     }
 
     public String getPoster_path() {
@@ -43,4 +53,29 @@ public class MovieModel {
     public void setFavPosition(int favPosition) {
         this.favPosition = favPosition;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+        dest.writeString(poster_path);
+            dest.writeInt(id);
+        dest.writeInt(favPosition);
+    }
+
+    public static final Parcelable.Creator<MovieModel> CREATOR
+            = new Parcelable.Creator<MovieModel>() {
+        public MovieModel createFromParcel(Parcel in) {
+            return new MovieModel(in);
+        }
+
+        public MovieModel[] newArray(int size) {
+            return new MovieModel[size];
+        }
+    };
+
 }
