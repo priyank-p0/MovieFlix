@@ -36,7 +36,6 @@ DatabaseHelper myDb;
         setContentView(activity_favourate_detail);
         myDb=new DatabaseHelper(this);
         movieModelList=obj.movieModelList;
-        MainActivity obj=new MainActivity();
         position=obj.pos;
         favBox=(CheckBox)findViewById(R.id.checkBox);
       /*   if(res.getPosition()==-1)

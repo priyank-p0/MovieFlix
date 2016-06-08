@@ -86,7 +86,7 @@
         android:text="Favourate"
         android:id="@+id/favouratecheckBox"
         android:checked="false"
-        android:onClick="onCheckboxClicked"
+
         android:layout_above="@+id/ratingBar"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />

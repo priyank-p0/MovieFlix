@@ -12,6 +12,7 @@ import android.widget.Button;
 public class Settings extends AppCompatActivity {
  static String valu;
     MainActivity mainActivity=new MainActivity();
+    movieDetail obj=new movieDetail();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Button btn=(Button)findViewById(R.id.button2);

@@ -13,7 +13,7 @@ public class MovieModel implements Parcelable{
 
     private String poster_path;
 
-    private int id;
+    public int id;
     private int favPosition=0;
 
 

@@ -76,9 +76,7 @@ static int favposition;
             favourateModel.setId(res.getString(0));
 
             favourateModel.setName(res.getString(1));
-           // favourateModel.setRelease_date(res.getString(2));
-          //  favourateModel.setOverview(res.getString(3));
-          //  favourateModel.setPoster(res.getString(4));
+
             favList.add(favourateModel);
 
         }

@@ -28,6 +28,8 @@ Favourates favourates=new Favourates();
     }
 
 
+
+
     @Override
     public void onCreate(SQLiteDatabase db) {
 

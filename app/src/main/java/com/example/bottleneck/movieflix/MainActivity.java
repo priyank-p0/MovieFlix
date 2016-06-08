@@ -1,48 +1,35 @@
 package com.example.bottleneck.movieflix;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
-import android.view.View;
+
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.GridView;
-import android.widget.ImageButton;
-import android.widget.TextView;
+
 import android.content.Intent;
 import android.widget.Toast;
 
 import com.example.bottleneck.movieflix.models.MovieModel;
-import com.squareup.picasso.Picasso;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.*;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements Communicator {
     private static final String STATE_MOVIES ="state_movies" ;
-    static ImageButton movieButton;
-    static int value;
     static int pos;
   static  public ArrayList <MovieModel>movieModelList;
-    static int postitonMain;
     private static boolean flag=true;
     DatabaseHelper myDb;
+   static String vale;
+    FragmentManager manager;
+    fragmentname f1;
+    movieDetail f2;
     public boolean isOnline() {
         ConnectivityManager cm =
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -53,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+       setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -61,26 +48,42 @@ public class MainActivity extends AppCompatActivity {
 
         Settings obj=new Settings();
 
-        String vale=obj.valu;
+      vale  =obj.valu;
         if(savedInstanceState!=null)
         {
           movieModelList=savedInstanceState.getParcelableArrayList(STATE_MOVIES);
         }
         else {
             if (flag) {
-                vale = "top_rated";
+                vale = "popularity";
                 flag = false;
             }
             boolean net = isOnline();
             if (net) {
-                new Task().execute("http://api.themoviedb.org/3/discover/movie?sort_by=" + vale + ".desc&api_key=" + "API_KEY");
+
+                    manager=getFragmentManager();
+                    f1= (fragmentname) customFragment();
+                     //f1.setCommunicator(this);
+
+
+
             } else {
                 String message = "Check Your Network Connection";
                 Toast.makeText(this, message, Toast.LENGTH_LONG).show();
 
             }
         }
+
+
         }
+
+    private Fragment customFragment(){
+        Bundle bundle=new Bundle();
+        bundle.putString(vale,"value");
+        fragmentname name=new fragmentname();
+        name.setArguments(bundle);
+        return name;
+    }
 
 @Override
 public void onSaveInstanceState(Bundle outstate)
@@ -89,139 +92,6 @@ public void onSaveInstanceState(Bundle outstate)
     outstate.putParcelableArrayList(STATE_MOVIES, (ArrayList<? extends Parcelable>) movieModelList);
 }
 
-
-
-
-    public class Task extends AsyncTask<String,String,ArrayList<MovieModel>>
-    {
-
-        GridView movieView=(GridView)findViewById(R.id.movieView);
-
-
-        @Override
-        protected ArrayList<MovieModel> doInBackground(String... params) {
-            HttpURLConnection connection=null;
-
-            try{
-                URL url=new URL(params[0]);
-                connection=(HttpURLConnection)url.openConnection();
-
-                connection.connect();
-
-                InputStream stream=connection.getInputStream();
-
-                BufferedReader br=new BufferedReader(new InputStreamReader(stream));
-
-
-                StringBuffer buffer=new StringBuffer();
-                String line="";
-                while((line=br.readLine())!=null)
-                {
-                    buffer.append(line);
-                }
-
-
-                String finalJson=buffer.toString();
-
-                JSONObject JSON=new JSONObject(finalJson);
-                JSONArray parentarray=JSON.getJSONArray("results");
-                ArrayList<MovieModel> movieList=new ArrayList<>();
-                for(int i=0;i<parentarray.length();i++)
-                {
-                    JSONObject finalObject=parentarray.getJSONObject(i);
-                    MovieModel movieModel=new MovieModel();
-
-                    movieModel.setId(finalObject.getInt("id"));
-                    movieModel.setPoster_path(finalObject.getString("poster_path"));
-                    movieList.add(movieModel);
-
-                }
-
-                return  movieList;
-            }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            } finally {
-                if(connection!=null) {
-                    connection.disconnect();
-                }
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList<MovieModel> outcome) {
-            super.onPostExecute(outcome);
-            MovieAdapter movieAdapter=new MovieAdapter(getApplicationContext(),R.layout.main_layout,outcome);
-            movieView.setAdapter(movieAdapter);
-
-        }
-    }
-    Context co;
-    public class MovieAdapter extends ArrayAdapter
-    {
-        private int res;
-        private Context context;
-        private LayoutInflater inflater;
-
-        public MovieAdapter(Context context, int resource, ArrayList <MovieModel>objects) {
-
-            super(context, resource, objects);
-            co=context;
-            movieModelList=objects;
-            res=resource;
-            inflater=(LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
-
-        }
-
-//gets the list view form the content view and loads the image of the poplular movies
-        //used to go to the next activity on clicking on the movie icon
-
-       @Override
-        public View getView(  int position, View convertView, ViewGroup parent) throws NullPointerException
-        {
-
-            if(convertView==null)
-                convertView = inflater.inflate(R.layout.main_layout, parent, false);
-
-
-
-
-            movieButton=(ImageButton)convertView.findViewById(R.id.movieButton);
-            movieButton.setTag(Integer.valueOf(position));
-            pos=position;
-            int width = getApplicationContext().getResources().getDisplayMetrics().widthPixels;
-            int height = getApplicationContext().getResources().getDisplayMetrics().heightPixels;
-            movieButton.setPadding(0, 0, 0, 0);
-
-            String URL="http://image.tmdb.org/t/p/w185/"+movieModelList.get(position).getPoster_path();
-            Picasso.with(co).load(URL).resize((width / 2), (height / 2)).into(movieButton);
-
-            return convertView;
-
-        }
-    }
-
-
-
-
-
-    public void showMovieDetail(View view)//starts a new activity
-    {
-        postitonMain = (Integer)view.getTag();//gets the positon of the button, required to get the details of the movie
-        value=movieModelList.get(postitonMain).getId();//gets the ID of the movie
-         Intent intent = new Intent(this, movieDetail.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-
-        startActivity(intent);
-
-
-
-    }
 
 
 
@@ -250,4 +120,32 @@ public void onSaveInstanceState(Bundle outstate)
 
         return super.onOptionsItemSelected(item);
     }
+
+
+    @Override
+    public void respond(int id) {
+    f2=(movieDetail)manager.findFragmentById(R.id.fragment2);
+        if(f2!=null&& f2.isVisible())
+        {
+            f2.execute(id);
+        }
+        else
+        {
+            Intent in = new Intent(this, Details.class);
+            in.putExtra("value",id);
+            startActivity(in);
+        }
+    }
+    /*public void showMovieDetail(View view)
+    {
+        int postitonMain = (Integer)view.getTag();//gets the positon of the button, required to get the details of the movie
+        value=movieModelList.get(postitonMain).getId();//gets the ID of the movie
+        Intent intent = new Intent(this, movieDetail.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        startActivity(intent);
+
+
+
+    }*/
 }

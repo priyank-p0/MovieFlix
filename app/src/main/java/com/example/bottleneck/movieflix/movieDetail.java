@@ -1,16 +1,17 @@
 package com.example.bottleneck.movieflix;
 
+import android.app.Activity;
+import android.app.Fragment;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.provider.BaseColumns;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
@@ -20,7 +21,6 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.bottleneck.movieflix.models.FavourateModel;
 import com.example.bottleneck.movieflix.models.MovieModel;
 import com.squareup.picasso.Picasso;
 
@@ -40,9 +40,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class movieDetail extends AppCompatActivity {
+
+public class movieDetail extends Fragment implements View.OnClickListener {
 ListView Trailerview;
-    CheckBox favBox ;
+    static CheckBox favBox ;
    static ArrayList<String>arrayList=new ArrayList<>();
      String array[];
      Cursor cursor;
@@ -53,53 +54,80 @@ ListView Trailerview;
     DatabaseHelper myDb;
     ArrayList videol=new ArrayList<String>();
     double popu=0.0;
+
+
+    TextView orignal_title;
+    TextView release_date;
+    TextView Overview;
+    RatingBar rbar;
+    ImageView pic;
+    TextView title;
+    TextView review;
+
+
     String poster="";
    static String byteArray;
     static String rString;
     String arrReview[]=new String[100];
-    int position;
-     List<MovieModel>movieModelList;
+
     String va;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) throws NullPointerException{
-        super.onCreate(savedInstanceState);
-         favBox = (CheckBox) findViewById(R.id.favouratecheckBox);
 
-        setContentView(R.layout.activity_movie_detail);
-         position=obj.pos;
-        movieModelList=obj.movieModelList;
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        myDb = new DatabaseHelper(this);
+
+
+
+        View view= inflater.inflate(R.layout.activity_movie_detail, container, false);
+        favBox = (CheckBox)view.findViewById(R.id.favouratecheckBox);
+
+
+        title=(TextView) view.findViewById(R.id.title);
+        pic=(ImageView)view.findViewById(R.id.icon);
+        release_date=(TextView) view.findViewById(R.id.release_date);
+        Overview=(TextView) view.findViewById(R.id.overview);
+        Trailerview=(ListView) view.findViewById(R.id.videolist);
+        rbar=(RatingBar) view.findViewById(R.id.ratingBar);
+        return view;
+    }
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        myDb = new DatabaseHelper(getActivity());
 
         cursor=myDb.getData();
 
-        int val=  obj.value;
-        va = Integer.toString(val);
-         array=new String[cursor.getCount()];
-        new JSONTask().execute("http://api.themoviedb.org/3/movie/" + va + "?api_key="+"API_KEY","http://api.themoviedb.org/3/movie/"+va+"/videos?api_key="+"API_KEY","http://api.themoviedb.org/3/movie/"+va+"/reviews?api_key="+"API_KEY");
+        //int val=  obj.value;
+       // va = Integer.toString(val);
+        array=new String[cursor.getCount()];
+    }
 
-
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
     }
 
 
 
-        public void onCheckboxClicked (View v){
+public void execute(int id)
+{
+    va= String.valueOf(id);
+    new JSONTask().execute("http://api.themoviedb.org/3/movie/" + va + "?api_key="+"0cb67e7b6e1f25bd955be7fab866e8b9","http://api.themoviedb.org/3/movie/"+va+"/videos?api_key="+"0cb67e7b6e1f25bd955be7fab866e8b9","http://api.themoviedb.org/3/movie/"+va+"/reviews?api_key="+"0cb67e7b6e1f25bd955be7fab866e8b9");
 
+}
 
+    @Override
+    public void onClick(View v) {
 
-
-            boolean isInserted = myDb.insertData(Title, date, overview, byteArray, rString);
-            if (isInserted) {
-                Toast.makeText(movieDetail.this, "Added to favourate", Toast.LENGTH_LONG).show();
-
+        boolean isInserted = myDb.insertData(Title, date, overview, byteArray, rString);
+        if (isInserted) {
+            Toast.makeText(getActivity(), "Added to favourate", Toast.LENGTH_LONG).show();
+            favBox.setClickable(false);
         }
-
     }
-
-
-
-
 
 
     public class JSONTask extends AsyncTask<String, Void,Void> {
@@ -138,7 +166,7 @@ ListView Trailerview;
                 try {
 
 
-                    Bitmap immagex=Picasso.with(getApplicationContext()).load("http://image.tmdb.org/t/p/w185/"+poster).get();;
+                    Bitmap immagex=Picasso.with(getContext()).load("http://image.tmdb.org/t/p/w185/"+poster).get();;
 
 
 
@@ -205,19 +233,8 @@ ListView Trailerview;
         }
         public void exec()
         {
-            TextView orignal_title;
-            TextView release_date;
-            TextView Overview;
-            RatingBar rbar;
-            ImageView pic;
-            TextView title;
-            TextView review;
-            title=(TextView)findViewById(R.id.title);
-            pic=(ImageView)findViewById(R.id.icon);
-            release_date=(TextView)findViewById(R.id.release_date);
-            Overview=(TextView)findViewById(R.id.overview);
-            Trailerview=(ListView)findViewById(R.id.videolist);
-            rbar=(RatingBar)findViewById(R.id.ratingBar);
+
+
 
             title.setText(Title);
             rbar.setRating((float) (popu / 2));
@@ -227,7 +244,7 @@ ListView Trailerview;
             int ctr=1;
             Overview.setText("SYNOPSIS:"+"\n"+overview+"\n\n\n\n"+"REVIEWS:"+"\n\n");
             String URL="http://image.tmdb.org/t/p/w185/"+poster;
-            Picasso.with(getApplicationContext()).load(URL).resize(450, 700).into(pic);
+            Picasso.with(getContext()).load(URL).resize(450, 700).into(pic);
             StringBuilder builder = new StringBuilder();
             for (int i=0;i<arrReview.length;i++) {
                 String s = arrReview[i];
@@ -240,12 +257,12 @@ ListView Trailerview;
 
                 if (cursor.moveToFirst()) {
                     do {
-                        CheckBox fav=(CheckBox)findViewById(R.id.favouratecheckBox);
+                        CheckBox fav=(CheckBox)getActivity().findViewById(R.id.favouratecheckBox);
 
                         if(cursor.getString(1).equalsIgnoreCase(Title))
                         {
-                            fav.setChecked(true);
-                            fav.setClickable(false);
+                            favBox.setChecked(true);
+                            favBox.setClickable(false);
                             break;
                         }
                        // arrayList.add(cursor.getString(1));
@@ -278,10 +295,10 @@ ListView Trailerview;
     }
     public void v()
     {
-         ArrayAdapter<String>  arrayAdapter= new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, videol);
+         ArrayAdapter<String>  arrayAdapter= new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, videol);
         Trailerview.setAdapter(arrayAdapter);
         Trailerview.setOnItemClickListener(ListClickHandler);
-
+        favBox.setOnClickListener(this);
 
     }
 
