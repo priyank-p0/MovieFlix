@@ -63,7 +63,7 @@ ListView Trailerview;
     ImageView pic;
     TextView title;
     TextView review;
-
+    CheckBox fav;
 
     String poster="";
    static String byteArray;
@@ -95,18 +95,13 @@ ListView Trailerview;
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
-        myDb = new DatabaseHelper(getActivity());
 
-        cursor=myDb.getData();
-
-        //int val=  obj.value;
-       // va = Integer.toString(val);
-        array=new String[cursor.getCount()];
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+         //   favBox=fav;
 
     }
 
@@ -115,7 +110,14 @@ ListView Trailerview;
 public void execute(int id)
 {
     va= String.valueOf(id);
-    new JSONTask().execute("http://api.themoviedb.org/3/movie/" + va + "?api_key="+"0cb67e7b6e1f25bd955be7fab866e8b9","http://api.themoviedb.org/3/movie/"+va+"/videos?api_key="+"0cb67e7b6e1f25bd955be7fab866e8b9","http://api.themoviedb.org/3/movie/"+va+"/reviews?api_key="+"0cb67e7b6e1f25bd955be7fab866e8b9");
+    myDb = new DatabaseHelper(getActivity());
+
+    cursor=myDb.getData();
+
+    //int val=  obj.value;
+    // va = Integer.toString(val);
+    array=new String[cursor.getCount()];
+    new JSONTask().execute("http://api.themoviedb.org/3/movie/" + va + "?api_key="+"API_KEY","http://api.themoviedb.org/3/movie/"+va+"/videos?api_key="+"API_KEY","http://api.themoviedb.org/3/movie/"+va+"/reviews?api_key="+"API_KEY");
 
 }
 
@@ -257,10 +259,12 @@ public void execute(int id)
 
                 if (cursor.moveToFirst()) {
                     do {
-                        CheckBox fav=(CheckBox)getActivity().findViewById(R.id.favouratecheckBox);
-
+                       fav=(CheckBox)getActivity().findViewById(R.id.favouratecheckBox);
+                        favBox=fav;
                         if(cursor.getString(1).equalsIgnoreCase(Title))
                         {
+                            fav.setChecked(true);
+                            fav.setClickable(false);
                             favBox.setChecked(true);
                             favBox.setClickable(false);
                             break;
@@ -298,6 +302,7 @@ public void execute(int id)
          ArrayAdapter<String>  arrayAdapter= new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, videol);
         Trailerview.setAdapter(arrayAdapter);
         Trailerview.setOnItemClickListener(ListClickHandler);
+        if(fav.isChecked()==false)
         favBox.setOnClickListener(this);
 
     }

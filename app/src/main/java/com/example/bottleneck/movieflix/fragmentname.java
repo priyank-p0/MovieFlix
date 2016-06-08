@@ -85,7 +85,7 @@ public class fragmentname extends Fragment
         communicator= (Communicator) getActivity();
 
         super.onActivityCreated(savedInstanceState);
-        new Task().execute("http://api.themoviedb.org/3/discover/movie?sort_by=" +value+ ".desc&api_key=" + "0cb67e7b6e1f25bd955be7fab866e8b9");
+        new Task().execute("http://api.themoviedb.org/3/discover/movie?sort_by=" +value+ ".desc&api_key=" + "API_KEY");
 
     }
 

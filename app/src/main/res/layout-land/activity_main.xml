@@ -7,7 +7,8 @@
     android:fitsSystemWindows="true"
     tools:context="com.example.bottleneck.movieflix.MainActivity"
     android:background="@color/grey"
-    android:id="@+id/layout_main">
+    android:id="@+id/layout_main"
+    >
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -30,7 +31,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_weight="0"
-
+        android:layout_gravity="left"
         android:name="com.example.bottleneck.movieflix.fragmentname"
         android:id="@+id/fragment"
         />
@@ -41,7 +42,7 @@
         android:layout_height="match_parent"
         android:name="com.example.bottleneck.movieflix.movieDetail"
         android:id="@+id/fragment2"
-        android:layout_gravity="center_vertical" />
+        android:layout_gravity="right" />
 
 
 </android.support.design.widget.CoordinatorLayout>
