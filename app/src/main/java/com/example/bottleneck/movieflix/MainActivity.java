@@ -124,9 +124,13 @@ public void onSaveInstanceState(Bundle outstate)
 
     @Override
     public void respond(int id) {
-    f2=(movieDetail)manager.findFragmentById(R.id.fragment2);
+        FragmentManager manage=getFragmentManager();
+        f1=(fragmentname)manage.findFragmentById(R.id.fragment);
+    f2=(movieDetail)manage.findFragmentById(R.id.fragment2);
         if(f2!=null&& f2.isVisible())
         {
+            f1= (fragmentname) customFragment();
+
             f2.execute(id);
         }
         else

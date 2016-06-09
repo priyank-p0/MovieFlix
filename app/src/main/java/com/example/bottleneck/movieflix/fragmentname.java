@@ -1,10 +1,12 @@
 package com.example.bottleneck.movieflix;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -50,7 +52,8 @@ public class fragmentname extends Fragment
     Communicator communicator;
     Context co;
     MovieAdapter movieAdapter;
-
+    static String value;
+    @TargetApi(Build.VERSION_CODES.M)
     @Override
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -59,8 +62,7 @@ public class fragmentname extends Fragment
 
         movieView=(GridView)view.findViewById(R.id.movieView);
         button=(ImageButton)getActivity().findViewById(R.id.movieButton);
-
-        movieAdapter= new MovieAdapter(getActivity());
+        movieAdapter= new MovieAdapter(getContext());
         movieView.setAdapter(movieAdapter);
 
         return view;
@@ -75,12 +77,12 @@ public class fragmentname extends Fragment
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        MainActivity obj=new MainActivity();
-         String value=obj.vale;
+        Settings obj=new Settings();
+        value=obj.valu;
         communicator= (Communicator) getActivity();
 
         super.onActivityCreated(savedInstanceState);
-        new Task().execute("http://api.themoviedb.org/3/movie" +value+ "?api_key=" + "API_KEY");
+        new Task().execute("http://api.themoviedb.org/3/movie/" +"popular"+ "?api_key=" + "API_KEY");
 
     }
 
@@ -149,13 +151,14 @@ public class fragmentname extends Fragment
                     connection.disconnect();
                 }
             }
+
             return null;
         }
 
         @Override
         protected void onPostExecute(ArrayList<MovieModel> outcome) {
             super.onPostExecute(outcome);
-            movieAdapter=new MovieAdapter(getContext(),R.layout.fragment_name,outcome);
+            movieAdapter=new MovieAdapter(getActivity(),R.layout.fragment_name,outcome);
             movieView.setAdapter(movieAdapter);
 
 
@@ -177,7 +180,7 @@ public class fragmentname extends Fragment
 
         private LayoutInflater inflater;
         public MovieAdapter(Context context) {
-            super(context, android.R.layout.simple_list_item_1);
+            super(context, android.R.layout.simple_list_item_2);
             inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
 
