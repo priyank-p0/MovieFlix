@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements Communicator {
         }
         else {
             if (flag) {
-                vale = "popularity";
+                vale = "popular";
                 flag = false;
             }
             boolean net = isOnline();
@@ -136,16 +136,5 @@ public void onSaveInstanceState(Bundle outstate)
             startActivity(in);
         }
     }
-    /*public void showMovieDetail(View view)
-    {
-        int postitonMain = (Integer)view.getTag();//gets the positon of the button, required to get the details of the movie
-        value=movieModelList.get(postitonMain).getId();//gets the ID of the movie
-        Intent intent = new Intent(this, movieDetail.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        startActivity(intent);
-
-
-
-    }*/
 }

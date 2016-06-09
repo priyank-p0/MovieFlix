@@ -21,7 +21,6 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.bottleneck.movieflix.models.MovieModel;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -37,7 +36,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
 
 
@@ -56,7 +54,6 @@ ListView Trailerview;
     double popu=0.0;
 
 
-    TextView orignal_title;
     TextView release_date;
     TextView Overview;
     RatingBar rbar;
@@ -114,8 +111,7 @@ public void execute(int id)
 
     cursor=myDb.getData();
 
-    //int val=  obj.value;
-    // va = Integer.toString(val);
+
     array=new String[cursor.getCount()];
     new JSONTask().execute("http://api.themoviedb.org/3/movie/" + va + "?api_key="+"API_KEY","http://api.themoviedb.org/3/movie/"+va+"/videos?api_key="+"API_KEY","http://api.themoviedb.org/3/movie/"+va+"/reviews?api_key="+"API_KEY");
 
@@ -269,10 +265,7 @@ public void execute(int id)
                             favBox.setClickable(false);
                             break;
                         }
-                       // arrayList.add(cursor.getString(1));
-                       // String t=Title;
-                       // if(arrayList.get(in).toString().equalsIgnoreCase(Title))
-                         // in++;
+
 
                     } while (cursor.moveToNext()&&in<cursor.getCount());
                 }

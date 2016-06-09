@@ -7,16 +7,12 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageButton;
-import android.widget.ListAdapter;
-import android.widget.Toast;
 
 import com.example.bottleneck.movieflix.models.MovieModel;
 import com.squareup.picasso.Picasso;
@@ -67,7 +63,6 @@ public class fragmentname extends Fragment
         movieAdapter= new MovieAdapter(getActivity());
         movieView.setAdapter(movieAdapter);
 
-      //  movieView.setOnItemClickListener(this);
         return view;
 
     }
@@ -85,25 +80,16 @@ public class fragmentname extends Fragment
         communicator= (Communicator) getActivity();
 
         super.onActivityCreated(savedInstanceState);
-        new Task().execute("http://api.themoviedb.org/3/discover/movie?sort_by=" +value+ ".desc&api_key=" + "API_KEY");
+        new Task().execute("http://api.themoviedb.org/3/movie" +value+ "?api_key=" + "API_KEY");
 
     }
 
 
 
 
-//    public void setCommunicator(Communicator communicator)
-  //  {
- //       this.communicator=communicator;
-   // }
-///
 
 
 
-    //public interface Communicator {
-    //public void respond(int id);
-
-//}
 
 
 
@@ -238,7 +224,6 @@ public class fragmentname extends Fragment
 
         @Override
         public void onClick(View v) {
-      //      Toast.makeText(getActivity(),"Clicked",Toast.LENGTH_LONG).show();
 
             int identity= movieModelList.get((Integer) v.getTag()).getId();
 

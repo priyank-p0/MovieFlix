@@ -40,7 +40,7 @@ public class Settings extends AppCompatActivity {
 
     public void setPopular(View v)
     {
-        valu="popularity";
+        valu="popular";
 
 
         Intent i = new Intent(Settings.this, MainActivity.class);
