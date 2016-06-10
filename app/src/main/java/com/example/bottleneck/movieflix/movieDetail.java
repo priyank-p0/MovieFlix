@@ -21,6 +21,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.bottleneck.movieflix.models.MovieModel;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -95,7 +96,6 @@ ListView Trailerview;
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-         //   favBox=fav;
 
     }
 
@@ -110,12 +110,14 @@ public void execute(int id)
 
 
     array=new String[cursor.getCount()];
-    new JSONTask().execute("http://api.themoviedb.org/3/movie/" + va + "?api_key="+"API_KEY","http://api.themoviedb.org/3/movie/"+va+"/videos?api_key="+"API_KEY","http://api.themoviedb.org/3/movie/"+va+"/reviews?api_key="+"API_KEY");
+    new JSONTask().execute("http://api.themoviedb.org/3/movie/" + va + "?api_key="+"0cb67e7b6e1f25bd955be7fab866e8b9","http://api.themoviedb.org/3/movie/"+va+"/videos?api_key="+"0cb67e7b6e1f25bd955be7fab866e8b9","http://api.themoviedb.org/3/movie/"+va+"/reviews?api_key="+"0cb67e7b6e1f25bd955be7fab866e8b9");
 
 }
 
     @Override
     public void onClick(View v) {
+
+
 
         boolean isInserted = myDb.insertData(Title, date, overview, byteArray, rString);
         if (isInserted) {
@@ -161,7 +163,7 @@ public void execute(int id)
                 try {
 
 
-                    Bitmap immagex=Picasso.with(getContext()).load("http://image.tmdb.org/t/p/w185/"+poster).get();;
+                    Bitmap immagex=Picasso.with(getActivity()).load("http://image.tmdb.org/t/p/w185/"+poster).get();;
 
 
 
@@ -239,7 +241,7 @@ public void execute(int id)
             int ctr=1;
             Overview.setText("SYNOPSIS:"+"\n"+overview+"\n\n\n\n"+"REVIEWS:"+"\n\n");
             String URL="http://image.tmdb.org/t/p/w185/"+poster;
-            Picasso.with(getContext()).load(URL).resize(450, 700).into(pic);
+            Picasso.with(getActivity()).load(URL).resize(450, 700).into(pic);
             StringBuilder builder = new StringBuilder();
             for (int i=0;i<arrReview.length;i++) {
                 String s = arrReview[i];
@@ -292,8 +294,9 @@ public void execute(int id)
          ArrayAdapter<String>  arrayAdapter= new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, videol);
         Trailerview.setAdapter(arrayAdapter);
         Trailerview.setOnItemClickListener(ListClickHandler);
-        if(fav.isChecked()==false)
-        favBox.setOnClickListener(this);
+
+            if (favBox.isChecked() == false)
+                favBox.setOnClickListener(this);
 
     }
 

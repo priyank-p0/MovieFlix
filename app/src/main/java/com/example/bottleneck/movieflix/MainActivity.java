@@ -54,15 +54,15 @@ public class MainActivity extends AppCompatActivity implements Communicator {
                 flag = false;
             }
             boolean net = isOnline();
-            if (net) {
+            if (net==true) {
 
                     manager=getFragmentManager();
                     f1= (fragmentname) customFragment();
-                     //f1.setCommunicator(this);
 
 
 
-            } else {
+            }
+            else {
                 String message = "Check Your Network Connection";
                 Toast.makeText(this, message, Toast.LENGTH_LONG).show();
 
@@ -117,10 +117,19 @@ public class MainActivity extends AppCompatActivity implements Communicator {
     f2=(movieDetail)manage.findFragmentById(R.id.fragment2);
         if(f2!=null&& f2.isVisible())
         {
-          f1= (fragmentname) customFragment();
 
-            f2.execute(id);//to call the fragment directly if the device is in landscape mode
-        }
+
+                f1 = (fragmentname) customFragment();
+
+                f2.execute(id);
+                //to call the fragment directly if the device is in landscape mode
+
+            }
+
+
+
+
+
         else
         {
             Intent in = new Intent(this, Details.class);//for potrait mode
