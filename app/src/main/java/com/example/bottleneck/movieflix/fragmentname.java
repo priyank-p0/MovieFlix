@@ -89,7 +89,7 @@ public class fragmentname extends Fragment
           if(savedInstanceState!=null) {
 
 
-              movieModelList = savedInstanceState.getParcelableArrayList(STATE_MOVIES);
+              movieModelList = savedInstanceState.getParcelableArrayList(STATE_MOVIES);//obtaining moviemodellist from the savedinstance state
               movieAdapter=new MovieAdapter(getActivity(),R.layout.fragment_name,movieModelList);
               movieView.setAdapter(movieAdapter);
 
