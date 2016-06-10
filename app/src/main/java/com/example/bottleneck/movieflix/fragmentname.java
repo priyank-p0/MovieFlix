@@ -1,13 +1,12 @@
 package com.example.bottleneck.movieflix;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,27 +32,23 @@ import java.util.ArrayList;
 
 
 
-
-
-
-
-
 /**
  * Created by priyankpatel on 6/5/16.
  */
 
 public class fragmentname extends Fragment
 
-{
+{    private static final String STATE_MOVIES ="state_movies" ;
+
     static ImageButton movieButton;
-    static  public ArrayList <MovieModel>movieModelList;
+      public ArrayList <MovieModel>movieModelList;
     ImageButton button;
     GridView movieView;
     Communicator communicator;
     Context co;
-    MovieAdapter movieAdapter;
+    static boolean flag=false;
+ static  MovieAdapter movieAdapter;
     static String value;
-    @TargetApi(Build.VERSION_CODES.M)
     @Override
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -62,9 +57,17 @@ public class fragmentname extends Fragment
 
         movieView=(GridView)view.findViewById(R.id.movieView);
         button=(ImageButton)getActivity().findViewById(R.id.movieButton);
-        movieAdapter= new MovieAdapter(getContext());
-        movieView.setAdapter(movieAdapter);
 
+        super.onActivityCreated(savedInstanceState);
+        if(savedInstanceState!=null) {//retriving the movielist when the screen is rotated from previous state
+            movieModelList = savedInstanceState.getParcelableArrayList(STATE_MOVIES);
+
+
+            flag=true;
+            movieAdapter=new MovieAdapter(getActivity(),R.layout.fragment_name,movieModelList);//adding the list into the adapter
+            movieView.setAdapter(movieAdapter);
+
+        }
         return view;
 
     }
@@ -77,16 +80,33 @@ public class fragmentname extends Fragment
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        Settings obj=new Settings();
-        value=obj.valu;
-        communicator= (Communicator) getActivity();
-
+        MainActivity obj=new MainActivity();
+        value=obj.vale;
+        communicator= (Communicator)getActivity();
+        movieAdapter= new MovieAdapter(getActivity());
+        movieView.setAdapter(movieAdapter);
         super.onActivityCreated(savedInstanceState);
-        new Task().execute("http://api.themoviedb.org/3/movie/" +"popular"+ "?api_key=" + "API_KEY");
+          if(savedInstanceState!=null) {
+
+
+              movieModelList = savedInstanceState.getParcelableArrayList(STATE_MOVIES);
+              movieAdapter=new MovieAdapter(getActivity(),R.layout.fragment_name,movieModelList);
+              movieView.setAdapter(movieAdapter);
+
+
+          }
+        else
+        new Task().execute("http://api.themoviedb.org/3/movie/" +value+ "?api_key=" + "API_KEY");
 
     }
 
 
+    @Override
+    public void onSaveInstanceState(Bundle outstate)//saving the moviemodellist in before the activity is destroyed
+    {
+        super.onSaveInstanceState(outstate);
+        outstate.putParcelableArrayList(STATE_MOVIES, (ArrayList<? extends Parcelable>) movieModelList);
+    }
 
 
 
@@ -159,6 +179,7 @@ public class fragmentname extends Fragment
         protected void onPostExecute(ArrayList<MovieModel> outcome) {
             super.onPostExecute(outcome);
             movieAdapter=new MovieAdapter(getActivity(),R.layout.fragment_name,outcome);
+            ArrayList <MovieModel>movie=movieModelList;
             movieView.setAdapter(movieAdapter);
 
 

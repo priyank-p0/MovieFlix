@@ -42,10 +42,8 @@ import java.util.ArrayList;
 public class movieDetail extends Fragment implements View.OnClickListener {
 ListView Trailerview;
     static CheckBox favBox ;
-   static ArrayList<String>arrayList=new ArrayList<>();
      String array[];
      Cursor cursor;
-     MainActivity obj=new MainActivity();
     String Title="";
     String date="";
     String overview="";
@@ -59,7 +57,6 @@ ListView Trailerview;
     RatingBar rbar;
     ImageView pic;
     TextView title;
-    TextView review;
     CheckBox fav;
 
     String poster="";

@@ -25,24 +25,28 @@
 
     </android.support.design.widget.AppBarLayout>
 
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
 
     <fragment
-
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_weight="0"
-        android:layout_gravity="left"
         android:name="com.example.bottleneck.movieflix.fragmentname"
         android:id="@+id/fragment"
-        />
+        android:layout_weight="1"
+        android:layout_gravity="center_vertical" />
 
     <fragment
-        android:layout_weight="1"
         android:layout_width="wrap_content"
+        android:layout_weight="1"
         android:layout_height="match_parent"
         android:name="com.example.bottleneck.movieflix.movieDetail"
         android:id="@+id/fragment2"
-        android:layout_gravity="right" />
+        android:layout_gravity="bottom" />
+</LinearLayout>
 
 
 </android.support.design.widget.CoordinatorLayout>

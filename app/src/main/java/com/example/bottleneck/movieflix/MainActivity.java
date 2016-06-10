@@ -6,7 +6,6 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -21,7 +20,6 @@ import com.example.bottleneck.movieflix.models.MovieModel;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements Communicator {
-    private static final String STATE_MOVIES ="state_movies" ;
     static int pos;
   static  public ArrayList <MovieModel>movieModelList;
     private static boolean flag=true;
@@ -49,11 +47,8 @@ public class MainActivity extends AppCompatActivity implements Communicator {
         Settings obj=new Settings();
 
       vale  =obj.valu;
-        if(savedInstanceState!=null)
-        {
-          movieModelList=savedInstanceState.getParcelableArrayList(STATE_MOVIES);
-        }
-        else {
+
+
             if (flag) {
                 vale = "popular";
                 flag = false;
@@ -75,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements Communicator {
         }
 
 
-        }
+
 
     private Fragment customFragment(){
         Bundle bundle=new Bundle();
@@ -84,13 +79,6 @@ public class MainActivity extends AppCompatActivity implements Communicator {
         name.setArguments(bundle);
         return name;
     }
-
-@Override
-public void onSaveInstanceState(Bundle outstate)
-{
-    super.onSaveInstanceState(outstate);
-    outstate.putParcelableArrayList(STATE_MOVIES, (ArrayList<? extends Parcelable>) movieModelList);
-}
 
 
 
@@ -129,13 +117,13 @@ public void onSaveInstanceState(Bundle outstate)
     f2=(movieDetail)manage.findFragmentById(R.id.fragment2);
         if(f2!=null&& f2.isVisible())
         {
-            f1= (fragmentname) customFragment();
+          f1= (fragmentname) customFragment();
 
-            f2.execute(id);
+            f2.execute(id);//to call the fragment directly if the device is in landscape mode
         }
         else
         {
-            Intent in = new Intent(this, Details.class);
+            Intent in = new Intent(this, Details.class);//for potrait mode
             in.putExtra("value",id);
             startActivity(in);
         }
