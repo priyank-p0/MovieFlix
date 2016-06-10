@@ -113,7 +113,7 @@ public class fragmentname extends Fragment
             }
 
         if(isOnline()) {
-            new Task().execute("http://api.themoviedb.org/3/movie/" + value + "?api_key=" + "0cb67e7b6e1f25bd955be7fab866e8b9");
+            new Task().execute("http://api.themoviedb.org/3/movie/" + value + "?api_key=" + "API_KEY");
         }
                 else
         {

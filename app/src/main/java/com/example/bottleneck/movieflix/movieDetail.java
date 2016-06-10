@@ -110,7 +110,7 @@ public void execute(int id)
 
 
     array=new String[cursor.getCount()];
-    new JSONTask().execute("http://api.themoviedb.org/3/movie/" + va + "?api_key="+"0cb67e7b6e1f25bd955be7fab866e8b9","http://api.themoviedb.org/3/movie/"+va+"/videos?api_key="+"0cb67e7b6e1f25bd955be7fab866e8b9","http://api.themoviedb.org/3/movie/"+va+"/reviews?api_key="+"0cb67e7b6e1f25bd955be7fab866e8b9");
+    new JSONTask().execute("http://api.themoviedb.org/3/movie/" + va + "?api_key="+"API_KEY","http://api.themoviedb.org/3/movie/"+va+"/videos?api_key="+"API_KEY","http://api.themoviedb.org/3/movie/"+va+"/reviews?api_key="+"API_KEY");
 
 }
 
